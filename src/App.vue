@@ -2,7 +2,13 @@
 	<main class="flex flex-col gap-4">
 		<base-button @click="isShowModal = true">Добавить контакт</base-button>
 		<search-bar @search="search" />
-		<div v-if="contacts.length === 0" class="text-center text-lg font-semibold">
+		<div v-if="isLoading" class="text-center text-lg font-semibold">
+			Загрузка...
+		</div>
+		<div
+			v-else-if="filteredContacts.length === 0"
+			class="text-center text-lg font-semibold"
+		>
 			Контакты не найдены
 		</div>
 		<contact-list
@@ -23,38 +29,13 @@ import SearchBar from '@/components/SearchBar.vue'
 import ContactList from '@/components/ContactList.vue'
 import BaseModal from '@/components/base/BaseModal.vue'
 import ContactForm from '@/components/ContactForm.vue'
-import { ref, computed } from 'vue'
-import { nanoid } from 'nanoid'
+import { ref, computed, onMounted } from 'vue'
 
 const isShowModal = ref(false)
-const contacts = ref([
-	{
-		id: nanoid(),
-		name: 'Доцент',
-		phone: '+7 (111) 111-11-11',
-		email: 'alexander@example.com',
-	},
-	{
-		id: nanoid(),
-		name: 'Хмырь',
-		phone: '+7 (222) 222-22-22',
-		email: 'gavrila@example.com',
-	},
-	{
-		id: nanoid(),
-		name: 'Косой',
-		phone: '+7 (333) 333-33-33',
-		email: 'fedor@example.com',
-	},
-	{
-		id: nanoid(),
-		name: 'Василий Алибабаевич',
-		phone: '+7 (444) 444-44-44',
-		email: 'vasiliy@example.com',
-	},
-])
+const isLoading = ref(true)
 
 const searchText = ref('')
+const contacts = ref<IContact[]>([])
 
 const filteredContacts = computed(() => {
 	return contacts.value.filter((contact) =>
@@ -64,20 +45,48 @@ const filteredContacts = computed(() => {
 
 const addContact = (contact: IContact) => {
 	contacts.value.unshift(contact)
+	localStorage.setItem('contacts', JSON.stringify(contacts.value))
 	isShowModal.value = false
 }
 
 const deleteContact = (id: string) => {
 	contacts.value = contacts.value.filter((contact) => contact.id !== id)
+	localStorage.setItem('contacts', JSON.stringify(contacts.value))
 }
 
 const editContact = (contact: IContact) => {
 	contacts.value = contacts.value.map((c) =>
 		c.id === contact.id ? contact : c
 	)
+	localStorage.setItem('contacts', JSON.stringify(contacts.value))
 }
 
 const search = (text: string) => {
 	searchText.value = text
 }
+
+onMounted(async () => {
+	try {
+		const savedContacts = localStorage.getItem('contacts')
+		if (savedContacts) {
+			contacts.value = JSON.parse(savedContacts)
+			isLoading.value = false
+			return
+		}
+
+		await new Promise((resolve) => setTimeout(resolve, 1500))
+
+		const response = await fetch('/src/contacts.json')
+		if (!response.ok) {
+			throw new Error('Ошибка при загрузке данных')
+		}
+
+		contacts.value = await response.json()
+		localStorage.setItem('contacts', JSON.stringify(contacts.value))
+	} catch (error) {
+		console.error(error)
+	} finally {
+		isLoading.value = false
+	}
+})
 </script>
