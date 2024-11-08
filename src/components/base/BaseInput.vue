@@ -1,14 +1,17 @@
 <template>
-	<input
-		:value="inputValue"
-		@input="onInput"
-		class="text-black w-full outline-0 p-2 rounded-md"
-		:class="{
-			'outline outline-2 outline-red-500': hasError,
-		}"
-		type="text"
-		:placeholder="placeholder"
-	/>
+	<div class="w-full">
+		<input
+			:value="inputValue"
+			@input="onInput"
+			class="text-black w-full outline-0 p-2 rounded-md"
+			:class="{
+				'outline outline-2 outline-red-500': error,
+			}"
+			type="text"
+			:placeholder="placeholder"
+		/>
+		<p v-if="error" class="text-red-500 mt-2">{{ error }}</p>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -18,9 +21,9 @@ const props = defineProps({
 	modelValue: {
 		required: true,
 	},
-	hasError: {
-		type: Boolean,
-		default: false,
+	error: {
+		type: String,
+		required: false,
 	},
 	placeholder: {
 		type: String,
