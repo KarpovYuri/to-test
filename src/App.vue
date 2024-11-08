@@ -76,7 +76,7 @@ onMounted(async () => {
 
 		await new Promise((resolve) => setTimeout(resolve, 1500))
 
-		const response = await fetch('/src/contacts.json')
+		const response = await fetch('/contacts.json')
 		if (!response.ok) {
 			throw new Error('Ошибка при загрузке данных')
 		}

@@ -1,33 +1,37 @@
-# to-test
+# Тестовое задание
 
-This template should help get you started developing with Vue 3 in Vite.
+Приложение для управления контактами:
 
-## Recommended IDE Setup
+- **Добавлять контакты**: создавать новые записи с именем, телефоном и email.
+- **Редактировать контакты**: вносить изменения в существующие контакты.
+- **Удалять контакты**: удалять ненужные контакты из списка.
+- **Искать контакты**: использовать поисковую строку для быстрого поиска по имени.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Данные сохраняются в localStorage, что обеспечивает их доступность при перезагрузке страницы.
 
-## Type Support for `.vue` Imports in TS
+## Структура компонентов
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+1. **Контактный список** (`ContactList.vue`): отображает список контактов.
+2. **Поисковая строка** (`SearchBar.vue`): позволяет искать контакты по имени.
+3. **Форма для добавления и редактирования контактов** (`ContactForm.vue`): форма для ввода/редактирования данных.
+4. **Модальное окно** (`BaseModal.vue`): используется для отображения формы добавления/редактирования контактов.
+5. **Кнопки и базовые компоненты**: для работы с интерфейсом.
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+## Настройка проекта
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Режим разработки
 
 ```sh
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### Сборка для продакшена
 
 ```sh
 npm run build
 ```
+- [ссылка на Демо](https://to.karaudio.ru/)
